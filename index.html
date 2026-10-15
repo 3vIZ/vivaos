@@ -212,8 +212,8 @@
         let isStartMenuOpen = false;
 
         let userConfig = {
-            name: 'Alex',
-            pin: '1234'
+            name: localStorage.getItem('vivaos_name') || 'Alex',
+            pin: localStorage.getItem('vivaos_pin') || '1234'
         };
 
         const appsRegistry = {
@@ -381,7 +381,14 @@
                         bootScreen.style.opacity = '0';
                         setTimeout(() => {
                             bootScreen.remove();
-                            showOOBE();
+                            // Check if setup was already completed and saved in Local Storage
+                            if (localStorage.getItem('vivaos_setup_complete') === 'true') {
+                                document.getElementById('lock-username-display').innerText = userConfig.name;
+                                document.getElementById('start-user-greeting').innerText = `${userConfig.name}'s Workspace`;
+                                document.getElementById('lock-screen').classList.remove('hidden');
+                            } else {
+                                showOOBE();
+                            }
                         }, 500);
                     }, 400);
                 }
@@ -397,6 +404,11 @@
             const pinInput = document.getElementById('oobe-pin').value.trim();
             if (nameInput) userConfig.name = nameInput;
             if (pinInput) userConfig.pin = pinInput;
+
+            // Save to Local Storage
+            localStorage.setItem('vivaos_name', userConfig.name);
+            localStorage.setItem('vivaos_pin', userConfig.pin);
+            localStorage.setItem('vivaos_setup_complete', 'true');
 
             document.getElementById('lock-username-display').innerText = userConfig.name;
             document.getElementById('start-user-greeting').innerText = `${userConfig.name}'s Workspace`;
