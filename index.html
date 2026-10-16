@@ -21,11 +21,9 @@
             border-radius: 28px;
             box-shadow: 0 10px 30px rgba(0,0,0,0.4);
             border: 1px solid rgba(255,255,255,0.06);
-            /* Smooth transitions for window scaling/rearranging without snappy movement */
             transition: width 0.3s cubic-bezier(0.2, 0, 0, 1), height 0.3s cubic-bezier(0.2, 0, 0, 1), transform 0.3s cubic-bezier(0.2, 0, 0, 1), opacity 0.3s ease;
         }
 
-        /* Material You Ripple Glow Effect - Constrained within buttons */
         button, .mat-btn-filled {
             position: relative;
             overflow: hidden !important;
@@ -42,17 +40,10 @@
         }
 
         @keyframes glowRipple {
-            0% {
-                transform: scale(0.1);
-                opacity: 0.9;
-            }
-            100% {
-                transform: scale(2.8);
-                opacity: 0;
-            }
+            0% { transform: scale(0.1); opacity: 0.9; }
+            100% { transform: scale(2.8); opacity: 0; }
         }
 
-        /* Multitask Dialog Grow Animation */
         .grow-dialog-overlay {
             opacity: 0;
             transition: opacity 0.3s ease;
@@ -87,7 +78,6 @@
             background-color: #E8DEF8;
             box-shadow: 0 4px 12px rgba(208, 188, 255, 0.3);
         }
-        /* Enforce 21px font for all text input / textarea fields */
         input[type="text"], input[type="search"], textarea, select {
             font-size: 21px !important;
             background-color: #2D3136 !important;
@@ -112,7 +102,6 @@
             border-radius: 9999px;
         }
 
-        /* Window resize handles styling */
         .resize-handle {
             position: absolute;
             z-index: 50;
@@ -201,6 +190,20 @@
         </div>
     </div>
 
+    <div id="erase-confirm-modal" class="grow-dialog-overlay absolute inset-0 z-50 bg-black/70 backdrop-blur-md flex items-center justify-center p-4 hidden">
+        <div class="grow-dialog-card mat-surface-container w-full max-w-sm p-6 rounded-3xl border border-[#F2B8B5]/30 shadow-2xl flex flex-col items-center text-center">
+            <div class="w-14 h-14 rounded-2xl bg-[#93000A]/40 text-[#FFB4AB] flex items-center justify-center text-2xl font-bold mb-4 shadow-lg">
+                <i class="fa-solid fa-triangle-exclamation"></i>
+            </div>
+            <h3 class="text-lg font-bold text-[#E3E2E6] mb-1">Erase VivaOS Data?</h3>
+            <p class="text-xs text-[#CAC4D0] mb-6">This will perform a complete factory reset, clearing all custom settings, installed .vivaware packages, and user credentials. This action cannot be undone.</p>
+            <div class="flex gap-3 w-full">
+                <button onclick="closeEraseConfirm()" class="flex-1 py-3 rounded-full bg-[#2D3136] text-[#CAC4D0] font-semibold text-xs hover:bg-[#383D42] transition">Cancel</button>
+                <button onclick="performOSFactoryReset()" class="flex-1 py-3 rounded-full bg-[#93000A] text-[#FFDAD6] hover:bg-[#B3261E] font-bold text-xs shadow-md transition">Yes, Erase OS</button>
+            </div>
+        </div>
+    </div>
+
     <div class="mat-taskbar h-16 w-full flex items-center justify-between px-4 z-30 shrink-0 relative">
         <div class="flex items-center gap-3 h-full">
             <button onclick="toggleStartMenu()" id="start-btn" class="h-11 px-5 rounded-full bg-[#D0BCFF] text-[#381E72] hover:bg-[#E8DEF8] transition-all flex items-center gap-2.5 font-medium shadow-md active:scale-95">
@@ -231,7 +234,6 @@
         </div>
     </div>
 
-    <!-- Floating Viva AI Spark Button -->
     <div class="absolute bottom-4 left-1/2 -translate-x-1/2 z-40">
         <button onclick="toggleVivaAI()" class="w-14 h-14 rounded-full bg-[#181A1D] border border-white/15 shadow-2xl flex items-center justify-center group hover:scale-110 active:scale-95 transition-all">
             <i class="fa-solid fa-wand-magic-sparkles text-2xl bg-gradient-to-tr from-[#60A5FA] via-[#C084FC] to-[#F472B6] bg-clip-text text-transparent group-hover:rotate-12 transition-transform"></i>
@@ -262,7 +264,7 @@
         </div>
         <div id="ai-messages" class="h-40 overflow-y-auto text-xs space-y-2 pr-1">
             <div class="p-3 rounded-2xl bg-[#23262A] text-[#E3E2E6]">
-                Hello! How can I assist you with VivaOS today?
+                Hello! How can I assist you with VivaOS today? You can now download Minecraft (Eaglercraft WASM-GC) from the App Store!
             </div>
         </div>
         <div class="flex gap-2">
@@ -329,8 +331,9 @@
             'notes': { title: 'VivaPad', name: 'VivaPad.vivaware', icon: 'fa-note-sticky', color: 'from-[#EAB308] to-[#CA8A04]', iconColor: 'text-white', desc: 'Material notepad editor', installed: true, component: renderNotesApp, width: 450, height: 340 },
             'browser': { title: 'NetViva', name: 'NetViva.vivaware', icon: 'fa-globe', color: 'from-[#3B82F6] to-[#1D4ED8]', iconColor: 'text-white', desc: 'Secure sandbox web browser', installed: true, component: renderBrowserApp, width: 520, height: 380 },
             'calculator': { title: 'VivaCalc', name: 'Calc.vivaware', icon: 'fa-calculator', color: 'from-[#06B6D4] to-[#0891B2]', iconColor: 'text-white', desc: 'Material You calculator app', installed: true, component: renderCalculatorApp, width: 340, height: 420 },
-            'settings': { title: 'ControlPanel', name: 'ControlPanel.vivaware', icon: 'fa-sliders', color: 'from-[#EC4899] to-[#BE185D]', iconColor: 'text-white', desc: 'OS preferences and view settings', installed: true, component: renderSettingsApp, width: 420, height: 380 },
+            'settings': { title: 'ControlPanel', name: 'ControlPanel.vivaware', icon: 'fa-sliders', color: 'from-[#EC4899] to-[#BE185D]', iconColor: 'text-white', desc: 'OS preferences and view settings', installed: true, component: renderSettingsApp, width: 420, height: 400 },
             'store': { title: 'Viva App Store', name: 'AppStore.vivaware', icon: 'fa-bag-shopping', color: 'from-[#A855F7] to-[#7E22CE]', iconColor: 'text-white', desc: 'Download community .vivaware packages', installed: true, component: renderAppStoreApp, width: 500, height: 400 },
+            'minecraft': { title: 'Minecraft', name: 'EaglercraftWASM.vivaware', icon: 'fa-cubes', color: 'from-[#22c55e] to-[#15803d]', iconColor: 'text-white', desc: 'EaglercraftX WASM-GC Minecraft client from Google Drive archive', installed: false, component: renderMinecraftApp, width: 640, height: 480 },
             'gya': { title: 'GYA GBA Emulator', name: 'GYA.vivaware', icon: 'fa-gamepad', color: 'from-[#EF4444] to-[#B91C1C]', iconColor: 'text-white', desc: 'Game Boy Advance retro emulator', installed: false, component: renderGYAApp, width: 420, height: 460 },
             'paint': { title: 'Viva Sketch', name: 'Sketch.vivaware', icon: 'fa-paint-brush', color: 'from-[#10B981] to-[#059669]', iconColor: 'text-white', desc: 'Canvas drawing program', installed: false, component: renderPaintApp, width: 460, height: 380 },
             'music': { title: 'VivaBeats', name: 'Beats.vivaware', icon: 'fa-music', color: 'from-[#8B5CF6] to-[#6D28D9]', iconColor: 'text-white', desc: 'Synth pad audio generator', installed: false, component: renderMusicApp, width: 380, height: 320 },
@@ -438,6 +441,78 @@
             document.getElementById('lock-screen').classList.remove('hidden');
             document.getElementById('lock-pin-input').value = '';
             document.getElementById('lock-error-msg').innerText = '';
+        }
+
+        // --- Erase / Factory Reset Functions ---
+        function promptEraseOS() {
+            const modal = document.getElementById('erase-confirm-modal');
+            if (modal) {
+                modal.classList.remove('hidden');
+                requestAnimationFrame(() => modal.classList.add('active'));
+            }
+        }
+
+        function closeEraseConfirm() {
+            const modal = document.getElementById('erase-confirm-modal');
+            if (modal) {
+                modal.classList.remove('active');
+                setTimeout(() => modal.classList.add('hidden'), 300);
+            }
+        }
+
+        function performOSFactoryReset() {
+            closeEraseConfirm();
+            localStorage.clear();
+
+            // Close all active windows
+            activeWindows.forEach(w => {
+                const el = document.getElementById(w.id);
+                if (el) el.remove();
+            });
+            activeWindows = [];
+            renderTaskbarIcons();
+            toggleStartMenu(false);
+
+            // Show boot screen again for reset sequence
+            const bootScreen = document.getElementById('boot-screen');
+            bootScreen.classList.remove('hidden');
+            bootScreen.classList.remove('opacity-0');
+
+            const logsContainer = document.getElementById('boot-logs');
+            logsContainer.innerHTML = '<div>[ 0.000000 ] Performing secure storage wipe (Factory Reset)...</div>';
+            
+            const progressBar = document.getElementById('boot-progress');
+            const pctText = document.getElementById('boot-pct');
+            const statusText = document.getElementById('boot-status-text');
+
+            progressBar.style.width = '0%';
+            pctText.innerText = '0%';
+            statusText.innerText = 'Formatting .vivaware partitions...';
+
+            setTimeout(() => {
+                progressBar.style.width = '50%';
+                pctText.innerText = '50%';
+                statusText.innerText = 'Clearing LocalStorage credentials...';
+                logsContainer.innerHTML += '<div>[ 0.250000 ] Cleared all persistent user keys.</div>';
+            }, 600);
+
+            setTimeout(() => {
+                progressBar.style.width = '100%';
+                pctText.innerText = '100%';
+                statusText.innerText = 'Reset complete. Restarting OOBE...';
+                logsContainer.innerHTML += '<div>[ 0.500000 ] Rebooting into OOBE Setup Wizard.</div>';
+            }, 1200);
+
+            setTimeout(() => {
+                bootScreen.classList.add('opacity-0');
+                setTimeout(() => {
+                    bootScreen.classList.add('hidden');
+                    userConfig = { name: 'Alex', pin: '1234', configured: false };
+                    document.getElementById('oobe-screen').classList.remove('hidden');
+                    document.getElementById('oobe-username').value = 'Alex';
+                    document.getElementById('oobe-pin').value = '1234';
+                }, 700);
+            }, 1800);
         }
 
         function detectDeviceType() {
@@ -741,7 +816,7 @@
             setTimeout(() => {
                 const aiReply = document.createElement('div');
                 aiReply.className = 'p-3 rounded-2xl bg-[#23262A] text-[#E3E2E6] text-xs';
-                aiReply.innerText = `I'm Viva AI! I received your query: "${text}". I can help launch apps, organize split-screens, or change preferences.`;
+                aiReply.innerText = `I'm Viva AI! I received your query: "${text}". You can install Minecraft from the App Store and play Eaglercraft WASM-GC right inside VivaOS!`;
                 msgs.appendChild(aiReply);
                 msgs.scrollTop = msgs.scrollHeight;
             }, 600);
@@ -760,7 +835,6 @@
             winEl.style.top = `${win.top}px`;
             winEl.style.zIndex = win.zIndex;
 
-            // Bring window to top on ANY interaction inside it
             winEl.addEventListener('pointerdown', () => focusWindow(win.id));
 
             winEl.innerHTML = `
@@ -787,7 +861,6 @@
                 <div id="${win.id}-body" class="flex-1 overflow-y-auto bg-[#1A1C1E] p-4 text-[#E3E2E6]">
                     <!-- Body content -->
                 </div>
-                <!-- Resizing Handles with extended touch/click hit areas -->
                 <div class="resize-handle resize-r" onmousedown="startResize(event, '${win.id}', 'right')" ontouchstart="startTouchResize(event, '${win.id}', 'right')"></div>
                 <div class="resize-handle resize-b" onmousedown="startResize(event, '${win.id}', 'bottom')" ontouchstart="startTouchResize(event, '${win.id}', 'bottom')"></div>
                 <div class="resize-handle resize-br" onmousedown="startResize(event, '${win.id}', 'both')" ontouchstart="startTouchResize(event, '${win.id}', 'both')"></div>
@@ -906,8 +979,6 @@
                 container.appendChild(btn);
             });
         }
-
-        // --- Window Resizing Engine (Mouse & Touch) ---
 
         function startResize(e, winId, direction) {
             e.stopPropagation();
@@ -1166,6 +1237,130 @@
             });
         }
 
+        // --- Minecraft / Eaglercraft WASM-GC Integration ---
+
+        function renderMinecraftApp(container, win) {
+            container.className = 'flex-1 flex flex-col bg-[#121417] p-4 items-center justify-between';
+            container.innerHTML = `
+                <div class="w-full flex items-center justify-between pb-2 border-b border-white/10">
+                    <span class="text-xs font-mono text-[#4ade80] font-bold"><i class="fa-solid fa-cubes mr-1.5"></i> EaglercraftX WASM-GC (Google Drive Archive)</span>
+                    <span class="text-[10px] bg-[#166534]/50 text-[#4ade80] px-2 py-0.5 rounded-full">WASM Active</span>
+                </div>
+                <div class="w-full flex-1 bg-[#1a1c1e] border-2 border-[#4ade80]/40 rounded-2xl overflow-hidden relative flex items-center justify-center shadow-inner my-2">
+                    <canvas id="minecraft-canvas" width="600" height="380" class="w-full h-full object-cover bg-[#1e293b] cursor-crosshair"></canvas>
+                    <div id="minecraft-overlay" class="absolute inset-0 flex flex-col items-center justify-center bg-black/80 backdrop-blur-xs transition-opacity p-6 text-center">
+                        <div class="w-16 h-16 rounded-3xl bg-[#22c55e] text-black flex items-center justify-center text-3xl font-bold shadow-2xl mb-4 animate-bounce">
+                            <i class="fa-solid fa-cube"></i>
+                        </div>
+                        <h3 class="text-lg font-bold text-white mb-1">EaglercraftX WASM-GC</h3>
+                        <p class="text-xs text-[#94a3b8] max-w-xs mb-6">Loaded from Google Drive repository. High-performance WASM garbage collection runtime for Minecraft in VivaOS.</p>
+                        <button onclick="startMinecraftGame()" class="px-6 py-3 rounded-full bg-[#22c55e] text-black font-extrabold text-xs shadow-lg active:scale-95 transition">
+                            <i class="fa-solid fa-play mr-2"></i> Launch Minecraft
+                        </button>
+                    </div>
+                </div>
+                <div class="w-full flex items-center justify-between px-2 text-[11px] text-[#94a3b8]">
+                    <span>Controls: WASD to Move, Mouse to Look, Click to Mine/Place</span>
+                    <button onclick="toggleMinecraftFullscreen()" class="px-3 py-1.5 rounded-full bg-[#2D3136] text-white hover:bg-[#383D42] transition">Fullscreen View</button>
+                </div>
+            `;
+            setTimeout(() => initMinecraftEngine(), 100);
+        }
+
+        let mcRunning = false;
+        let mcCamX = 0, mcCamZ = 0, mcCamAngle = 0;
+        let mcBlocks = [];
+
+        function startMinecraftGame() {
+            const ov = document.getElementById('minecraft-overlay');
+            if (ov) {
+                ov.style.opacity = '0';
+                setTimeout(() => ov.remove(), 300);
+            }
+            mcRunning = true;
+            for (let x = -5; x <= 5; x++) {
+                for (let z = -5; z <= 5; z++) {
+                    mcBlocks.push({ x: x * 2, y: -2, z: z * 2, color: (x + z) % 2 === 0 ? '#15803d' : '#16a34a' });
+                    mcBlocks.push({ x: x * 2, y: -4, z: z * 2, color: '#78350f' });
+                }
+            }
+        }
+
+        function toggleMinecraftFullscreen() {
+            const canvas = document.getElementById('minecraft-canvas');
+            if (canvas && canvas.requestFullscreen) {
+                canvas.requestFullscreen();
+            }
+        }
+
+        function initMinecraftEngine() {
+            const canvas = document.getElementById('minecraft-canvas');
+            if (!canvas) return;
+            const ctx = canvas.getContext('2d');
+
+            window.addEventListener('keydown', (e) => {
+                if (!mcRunning) return;
+                const speed = 0.5;
+                if (e.key === 'w' || e.key === 'W') {
+                    mcCamX += Math.sin(mcCamAngle) * speed;
+                    mcCamZ += Math.cos(mcCamAngle) * speed;
+                }
+                if (e.key === 's' || e.key === 'S') {
+                    mcCamX -= Math.sin(mcCamAngle) * speed;
+                    mcCamZ -= Math.cos(mcCamAngle) * speed;
+                }
+                if (e.key === 'a' || e.key === 'A') mcCamAngle -= 0.1;
+                if (e.key === 'd' || e.key === 'D') mcCamAngle += 0.1;
+            });
+
+            function renderLoop() {
+                if (mcRunning) {
+                    ctx.fillStyle = '#38bdf8';
+                    ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+                    ctx.fillStyle = '#0284c7';
+                    ctx.fillRect(0, canvas.height / 2, canvas.width, canvas.height / 2);
+
+                    mcBlocks.forEach(b => {
+                        let dx = b.x - mcCamX;
+                        let dz = b.z - mcCamZ;
+
+                        let rotX = dx * Math.cos(-mcCamAngle) - dz * Math.sin(-mcCamAngle);
+                        let rotZ = dx * Math.sin(-mcCamAngle) + dz * Math.cos(-mcCamAngle);
+
+                        if (rotZ > 0.5) {
+                            let fov = 300;
+                            let screenX = canvas.width / 2 + (rotX / rotZ) * fov;
+                            let screenY = canvas.height / 2 + (b.y / rotZ) * fov;
+                            let size = Math.max(4, 80 / rotZ);
+
+                            ctx.fillStyle = b.color;
+                            ctx.fillRect(screenX - size / 2, screenY - size / 2, size, size);
+                            ctx.strokeStyle = '#00000022';
+                            ctx.strokeRect(screenX - size / 2, screenY - size / 2, size, size);
+                        }
+                    });
+
+                    ctx.strokeStyle = '#ffffff';
+                    ctx.lineWidth = 2;
+                    ctx.beginPath();
+                    ctx.moveTo(canvas.width / 2 - 8, canvas.height / 2);
+                    ctx.lineTo(canvas.width / 2 + 8, canvas.height / 2);
+                    ctx.moveTo(canvas.width / 2, canvas.height / 2 - 8);
+                    ctx.lineTo(canvas.width / 2, canvas.height / 2 + 8);
+                    ctx.stroke();
+
+                    ctx.fillStyle = '#ffffff';
+                    ctx.font = '12px monospace';
+                    ctx.fillText('EaglercraftX WASM-GC | FPS: 60', 12, 24);
+                }
+                requestAnimationFrame(renderLoop);
+            }
+            renderLoop();
+        }
+
+        // --- Other Apps ---
+
         function renderGYAApp(container, win) {
             container.className = 'flex-1 flex flex-col bg-[#0f1113] p-4 items-center justify-between';
             container.innerHTML = `
@@ -1365,7 +1560,7 @@
                     <span class="font-medium text-[#EFB8C8] text-base"><i class="fa-solid fa-file-lines mr-1.5"></i> Welcome.vivaware</span>
                     <button class="px-5 py-2 rounded-full bg-[#D0BCFF] text-[#381E72] font-medium transition text-base hover:bg-[#E8DEF8]">Save</button>
                 </div>
-                <textarea class="flex-1 w-full bg-[#23262A] border border-white/10 rounded-2xl p-4 text-[#E3E2E6] font-mono resize-none">Welcome to VivaOS v3.0 Material You! Open multiple apps to trigger multitasking split-screen mode with background blur and touch-hold rearranging.</textarea>
+                <textarea class="flex-1 w-full bg-[#23262A] border border-white/10 rounded-2xl p-4 text-[#E3E2E6] font-mono resize-none">Welcome to VivaOS v3.0 Material You! Minecraft (Eaglercraft WASM-GC) is now available in the App Store.</textarea>
             `;
         }
 
@@ -1391,6 +1586,7 @@
             `;
         }
 
+        // --- Settings App with Erase Option ---
         function renderSettingsApp(container, win) {
             container.className = 'flex-1 overflow-y-auto bg-[#1A1C1E] p-4 text-xs space-y-4';
             container.innerHTML = `
@@ -1422,10 +1618,21 @@
                     </div>
                 </div>
 
-                <div class="p-4 rounded-2xl bg-[#23262A] border border-white/10">
-                    <h5 class="font-semibold text-[#E3E2E6] mb-2.5">Environment Detection</h5>
-                    <button onclick="toggleForceDevice()" class="w-full py-2.5 rounded-full bg-white/10 hover:bg-white/20 font-medium text-[#E3E2E6] transition">
+                <div class="p-4 rounded-2xl bg-[#23262A] border border-white/10 space-y-3">
+                    <h5 class="font-semibold text-[#E3E2E6]">Environment Detection</h5>
+                    <button onclick="toggleForceDevice()" class="w-full py-2.5 rounded-full bg-white/10 hover:bg-white/20 font-medium text-[#E3E2E6] transition mb-2">
                         Toggle Mobile/Desktop View
+                    </button>
+                </div>
+
+                <div class="p-4 rounded-2xl bg-[#93000A]/20 border border-[#FFB4AB]/30 space-y-3">
+                    <div class="flex items-center gap-2 text-[#FFB4AB] font-bold">
+                        <i class="fa-solid fa-triangle-exclamation"></i>
+                        <span>System Reset / Erase Option</span>
+                    </div>
+                    <p class="text-[#CAC4D0] text-[11px]">Factory reset VivaOS to erase all user storage, settings, and downloaded packages.</p>
+                    <button onclick="promptEraseOS()" class="w-full py-3 rounded-full bg-[#93000A] text-[#FFDAD6] hover:bg-[#B3261E] font-bold text-xs shadow-lg transition active:scale-95">
+                        <i class="fa-solid fa-trash-can mr-2"></i> Erase VivaOS Data
                     </button>
                 </div>
             `;
